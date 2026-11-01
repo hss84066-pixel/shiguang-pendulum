@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="輸入姓名與生日，靈擺感應你的七脈輪與金錢能量，對照霍金斯能量層級 0–1000。拾光星旅程｜靈擺 × 七脈輪 × 臼井靈氣">
+<meta property="og:title" content="靈擺脈輪能量測驗｜拾光星旅程">
+<meta property="og:description" content="測測你今天七個脈輪與金錢能量的頻率是幾分？">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0A0E22">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%230A0E22'/%3E%3Cline x1='50' y1='10' x2='50' y2='55' stroke='%23D9B46A' stroke-width='4'/%3E%3Cpolygon points='50,55 64,68 50,92 36,68' fill='%23D9B46A'/%3E%3C/svg%3E">
+<title>靈擺脈輪能量測驗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap">
+<style>
+/* Layout: one narrow ritual column on a living starfield — intro → pendulum scan → result report */
+:root{
+  --night:#0A0E22;
+  --night-2:#131939;
+  --panel:rgba(22,27,62,.78);
+  --line:rgba(217,180,106,.24);
+  --gold:#D9B46A;
+  --gold-hi:#F4DFA6;
+  --text:#EDE8DB;
+  --muted:#A9A6BC;
+  --low:#E8735F;
+  --low-bg:rgba(232,115,95,.10);
+  --high-bg:rgba(217,180,106,.08);
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-num:"Cormorant Garamond","Times New Roman",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--night);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.7;
+  background-image:radial-gradient(ellipse at 50% -10%,#232a5c 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,#1b1640 0%,transparent 55%);
+  background-attachment:fixed;overflow-x:hidden}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding-block:20px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.18em;color:var(--gold)}
+.brand span:last-child{color:var(--muted);letter-spacing:.08em}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;font-weight:700}
+h1{font-size:clamp(30px,8vw,42px);line-height:1.25;letter-spacing:.06em;color:var(--gold-hi);text-align:center}
+h2{font-size:21px;color:var(--gold-hi);letter-spacing:.05em}
+h3{font-size:17px}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.24em;color:var(--gold);text-align:center}
+.lede{text-align:center;color:var(--muted);max-width:30em;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.stack{display:flex;flex-direction:column;gap:14px}
+
+/* pendulum */
+.pend-stage{display:flex;justify-content:center}
+.pend-svg{width:min(220px,56vw);height:auto;overflow:visible}
+.pend-svg.big{width:min(260px,64vw)}
+#intro .pend-svg .swing{animation:idle 3.6s ease-in-out infinite;transform-origin:100px 8px}
+@keyframes idle{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+
+/* form */
+form{display:flex;flex-direction:column;gap:14px}
+label{font-size:13px;color:var(--gold);letter-spacing:.12em;display:block;margin-bottom:6px}
+input{width:100%;font:inherit;font-size:16px;color:var(--text);background:rgba(10,14,34,.7);border:1px solid var(--line);border-radius:12px;padding:13px 14px;outline:none}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,180,106,.18)}
+input::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.6)}
+.err{color:var(--low);font-size:13px;min-height:1.2em}
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.14em;
+  color:#1a1408;background:linear-gradient(180deg,var(--gold-hi),var(--gold));border-radius:999px;padding:15px 22px;
+  box-shadow:0 6px 24px rgba(217,180,106,.28);text-align:center;text-decoration:none;display:inline-block}
+.btn:focus-visible,.ghost:focus-visible,a:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.btn:active{transform:translateY(1px)}
+.ghost{appearance:none;cursor:pointer;font:inherit;font-size:14px;color:var(--gold-hi);background:transparent;border:1px solid var(--line);border-radius:999px;padding:10px 16px}
+.note{font-size:12px;color:var(--muted);text-align:center}
+
+/* scan */
+#scan{align-items:center;text-align:center;padding-top:10px}
+.scan-status{font-family:var(--f-display);font-size:20px;color:var(--gold-hi);min-height:1.6em;letter-spacing:.08em}
+.scan-sub{color:var(--muted);font-size:13px}
+.chakra-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.chakra-row i{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);transition:all .4s}
+.chakra-row i.on{background:var(--c);border-color:var(--c);box-shadow:0 0 14px var(--c)}
+.chakra-row i.money{border-radius:5px}
+
+/* share card */
+.share{background:linear-gradient(160deg,#1c2352 0%,#0f1330 60%,#1a1438 100%);border:1px solid var(--gold);border-radius:22px;padding:22px 20px;position:relative;overflow:hidden}
+.share::after{content:"";position:absolute;inset:8px;border:1px solid var(--line);border-radius:16px;pointer-events:none}
+.share-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.share-name{font-family:var(--f-display);font-size:22px;color:var(--gold-hi);word-break:break-all}
+.share-date{font-size:12px;color:var(--muted)}
+.share-score{display:flex;gap:14px;margin-top:14px}
+.share-score>div{flex:1;min-width:0}
+.big-num{font-family:var(--f-num);font-weight:600;font-size:56px;line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.big-cap{font-size:12px;color:var(--muted);letter-spacing:.1em}
+.big-lvl{font-family:var(--f-display);font-size:15px;color:var(--text)}
+.mini{display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.mini-row{display:grid;grid-template-columns:3.4em 1fr 2.6em;gap:8px;align-items:center;font-size:12px}
+.mini-row b{font-weight:500;color:var(--muted)}
+.mini-bar{height:7px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
+.mini-bar span{display:block;height:100%;border-radius:4px;background:var(--c)}
+.mini-row em{font-style:normal;font-family:var(--f-num);font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+.share-foot{margin-top:14px;font-size:12px;color:var(--gold);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* tree chart */
+.chart-box{overflow-x:auto}
+.chart-box svg{width:100%;height:auto;display:block;min-width:320px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--sw)}
+
+/* level table */
+.tbl{display:flex;flex-direction:column}
+.tr{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.tr:last-child{border-bottom:0}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.tr .nm{min-width:0}
+.tr .nm b{font-weight:500}
+.tr .nm small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.tr .sc{font-family:var(--f-num);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:2.4em}
+.chip{font-size:12px;padding:3px 9px;border-radius:999px;white-space:nowrap;border:1px solid}
+.chip.severe,.chip.low{color:var(--low);border-color:rgba(232,115,95,.5);background:var(--low-bg)}
+.chip.mid{color:#B9C3E8;border-color:rgba(185,195,232,.35)}
+.chip.ok{color:#9FD8A8;border-color:rgba(159,216,168,.4)}
+.chip.high{color:var(--gold-hi);border-color:var(--gold);background:var(--high-bg)}
+.scale-key{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:12px;color:var(--muted)}
+.scale-key div{display:flex;gap:8px;align-items:center}
+
+/* detail cards */
+.care{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:12px}
+.care-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.care-head h3{color:var(--c)}
+.care-meta{font-size:12px;color:var(--muted)}
+.blk h4{margin:0 0 4px;font-size:13px;letter-spacing:.12em;color:var(--gold)}
+.blk ul{margin:0;padding-left:1.2em}
+.blk li{margin:2px 0}
+.blk p{color:var(--text)}
+.tool{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tool>div{background:rgba(10,14,34,.55);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.tool h4{margin:0 0 4px;font-size:13px;color:var(--gold-hi);letter-spacing:.08em}
+.tool p{font-size:13px;line-height:1.6;color:var(--text)}
+@media (max-width:420px){.tool{grid-template-columns:1fr}}
+
+/* money */
+.money-top{display:flex;align-items:center;gap:16px}
+.coin{flex:none;width:86px;height:86px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,var(--gold-hi),var(--gold) 55%,#8a6a2c);color:#1a1408;
+  font-family:var(--f-num);font-size:34px;font-weight:700;box-shadow:0 0 30px rgba(217,180,106,.35)}
+.meter{height:10px;border-radius:5px;background:rgba(255,255,255,.07);position:relative;margin-top:6px}
+.meter span{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,#8a6a2c,var(--gold-hi))}
+.meter-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+
+/* services */
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.svc>div{border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0;background:rgba(10,14,34,.5)}
+.svc .tag{font-size:12px;letter-spacing:.16em;color:var(--gold)}
+.svc h3{color:var(--gold-hi);margin:4px 0 6px}
+.svc p{font-size:14px}
+@media (max-width:420px){.svc{grid-template-columns:1fr}}
+.cta{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.line-id{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.line-id code{font-family:var(--f-body);color:var(--text);background:rgba(10,14,34,.7);border:1px solid var(--line);border-radius:8px;padding:4px 10px;user-select:all}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disclaimer{font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--gold);color:#1a1408;padding:8px 16px;border-radius:999px;font-size:14px;z-index:20;transition:opacity .3s}
+
+.fade{animation:fadeUp .7s ease both}
+@keyframes fadeUp{from{opacity:.001;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<main class="wrap">
+  <div class="brand"><span id="brandName">拾光星旅程</span><span>靈擺 × 七脈輪 × 臼井靈氣</span></div>
+
+  <!-- INTRO -->
+  <section id="intro" class="stack fade">
+    <div class="eyebrow">PENDULUM ENERGY READING</div>
+    <h1>靈擺脈輪<br>能量測驗</h1>
+    <p class="lede">靜下心，輸入你的姓名與生日。靈擺會感應你今天七個脈輪與金錢能量的頻率，對照霍金斯能量層級 0–1000。</p>
+    <div class="pend-stage" id="pendIntro"></div>
+    <form id="form" class="panel" novalidate>
+      <div>
+        <label for="name">姓名</label>
+        <input id="name" name="name" autocomplete="name" maxlength="20" placeholder="請輸入你的名字">
+      </div>
+      <div>
+        <label for="birth">出生年月日</label>
+        <input id="birth" name="birth" type="date" min="1920-01-01">
+      </div>
+      <p class="err" id="err" role="alert"></p>
+      <button class="btn" type="submit">開始靈擺感應</button>
+      <p class="note">每天的能量都在流動，結果每日更新</p>
+    </form>
+  </section>
+
+  <!-- SCAN -->
+  <section id="scan" class="stack" hidden>
+    <div class="eyebrow">正在感應</div>
+    <div class="pend-stage" id="pendScan"></div>
+    <p class="scan-status" id="scanStatus" aria-live="polite">靈擺校準中…</p>
+    <div class="chakra-row" id="scanRow"></div>
+    <p class="scan-sub">請深呼吸，專注在你的心輪</p>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="stack" hidden>
+    <div class="share fade" id="shareCard"></div>
+    <p class="note">📸 截圖這張能量卡，分享到限動，或傳給老師看</p>
+
+    <div class="panel stack fade">
+      <h2>你的能量意識樹</h2>
+      <p class="care-meta">依霍金斯能量層級排列。200（勇氣）是正負能量分界，低於 200 代表該脈輪正在失衡。</p>
+      <div class="chart-box" id="chart"></div>
+      <div class="legend">
+        <span style="--sw:rgba(232,115,95,.5)">失衡區 &lt;200</span>
+        <span style="--sw:rgba(185,195,232,.35)">轉化區 200–499</span>
+        <span style="--sw:rgba(217,180,106,.6)">高頻區 500+</span>
+      </div>
+    </div>
+
+    <div class="panel stack fade">
+      <h2>脈輪等級對照表</h2>
+      <div class="tbl" id="table"></div>
+      <div class="scale-key">
+        <div><span class="chip severe">嚴重失衡</span>0–99</div>
+        <div><span class="chip low">失衡</span>100–199</div>
+        <div><span class="chip mid">啟動中</span>200–349</div>
+        <div><span class="chip ok">平衡</span>350–499</div>
+        <div><span class="chip high">高頻共振</span>500–1000</div>
+      </div>
+    </div>
+
+    <div class="panel stack fade">
+      <h2 id="careTitle">需要照顧的脈輪</h2>
+      <p class="care-meta" id="careLead"></p>
+      <div class="stack" id="care"></div>
+    </div>
+
+    <div class="panel stack fade" id="money"></div>
+
+    <div class="panel stack fade">
+      <h2>老師可以怎麼幫你</h2>
+      <div class="svc">
+        <div>
+          <div class="tag">提升頻率</div>
+          <h3>靈擺能量調頻</h3>
+          <p>用靈擺逐一校準脈輪的轉動與能量場，把卡在低頻的脈輪往上拉，讓整體能量層級提升。</p>
+        </div>
+        <div>
+          <div class="tag">平衡狀態</div>
+          <h3>臼井靈氣</h3>
+          <p>宇宙生命能量透過雙手傳導，鬆開身心的緊繃，讓七個脈輪彼此協調、回到穩定的平衡。</p>
+        </div>
+      </div>
+      <div class="cta">
+        <p>先調頻提升、再用靈氣穩住，分數才會留得住。</p>
+        <a class="btn" id="lineBtn" href="#" target="_blank" rel="noopener">加 LINE 預約一對一調頻</a>
+        <div class="line-id">LINE ID <code id="lineId"></code><button class="ghost" type="button" id="copyLine">複製</button></div>
+        <p class="note">把能量卡截圖傳給老師，可以直接針對你的弱項安排調頻</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="ghost" type="button" id="copyText">複製結果文字</button>
+      <button class="ghost" type="button" id="again">幫朋友測一次</button>
+    </div>
+    <p class="disclaimer">本測驗為能量覺察與娛樂參考，不構成醫療或心理診斷。<br>身體不適請諮詢專業醫師。</p>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ====== 可修改設定 ====== */
+const CONFIG = {
+  brand: "拾光星旅程",
+  lineUrl: "https://lin.ee/P7Ft3BoM",   // LINE 官方帳號連結
+  lineId: ""                            // 有 LINE ID 再填，例如 "@abc123"；空白則不顯示
+};
+
+/* ====== 資料 ====== */
+const CHAKRAS = [
+  {k:"root",name:"海底輪",short:"海底",c:"#E5484D",pos:"尾椎・脊椎底部",theme:"安全感・根基・金錢穩定",
+   signs:["對未來沒把握，常為錢焦慮","容易疲累、覺得腳步虛浮","很難安定下來，總覺得不夠"],
+   todo:["赤腳踩草地或土地 10 分鐘","多吃根莖類與紅色食物","固定作息，每天同一時間睡覺"],
+   pend:"用靈擺校正海底輪的轉動方向與幅度，把「不夠、不安全」的低頻調回穩定，重新感覺被大地托住。",
+   reiki:"靈氣從足底與尾椎注入，鬆開長期累積的緊繃與恐懼，回到踏實安穩。"},
+  {k:"sacral",name:"臍輪",short:"臍輪",c:"#F76B15",pos:"下腹部",theme:"創造力・情緒・享受",
+   signs:["情緒起伏大，或乾脆變得麻木","對生活提不起興趣、少了樂趣","在關係裡容易壓抑或過度依賴"],
+   todo:["放音樂扭動骨盆、跳支舞","喝足溫水、泡個熱水澡","每週做一件純粹讓自己開心的事"],
+   pend:"清理卡住的情緒能量，提升臍輪的流動頻率，讓創造力與享受感重新回來。",
+   reiki:"溫柔安撫下腹的情緒記憶，讓你允許自己感受，也允許自己快樂。"},
+  {k:"solar",name:"太陽神經叢輪",short:"太陽",c:"#FFC53D",pos:"胃部上方",theme:"自信・意志・行動力",
+   signs:["想很多做很少，容易拖延","很在意別人的眼光與評價","壓力一來，胃就跟著緊"],
+   todo:["上午曬太陽 15 分鐘","每天完成一件小目標","練習把「我試試看」改成「我決定」"],
+   pend:"強化太陽輪的能量場，提升個人力量的頻率，讓你決定變快、行動變穩。",
+   reiki:"釋放過度控制與自我批判，讓力量回到身上，而不是緊抓在腦袋裡。"},
+  {k:"heart",name:"心輪",short:"心輪",c:"#46A758",pos:"胸口中央",theme:"愛・連結・接納",
+   signs:["習慣什麼都自己扛，難以信任別人","過去的傷一直放不下","付出很多，卻很難接受別人的好"],
+   todo:["每天寫下三件感恩的事","雙手放胸口，對自己說聲謝謝","走進綠色植物多的地方散步"],
+   pend:"調整心輪頻率，化開防衛與委屈，讓愛進得來，也流得出去。",
+   reiki:"靈氣在胸口形成溫暖的支持，療癒舊傷，回到柔軟又有力量的狀態。"},
+  {k:"throat",name:"喉輪",short:"喉輪",c:"#3E9FE0",pos:"喉嚨",theme:"表達・溝通・真實",
+   signs:["想說的話常常吞回去","說了別人聽不懂，或容易起衝突","不敢展現真實的自己"],
+   todo:["每天朗讀或唱歌 5 分鐘","寫日記，把真心話寫出來","放鬆下顎與肩頸，多喝溫水"],
+   pend:"打通喉輪的阻塞頻率，讓說出來的話更有力量、更被聽見。對講師、業務、創作者特別重要。",
+   reiki:"鬆開喉嚨與肩頸累積的壓抑，讓真實的聲音自然流出來。"},
+  {k:"third",name:"眉心輪",short:"眉心",c:"#7B61E0",pos:"兩眉之間",theme:"直覺・洞察・清晰",
+   signs:["腦袋很亂，很難做判斷","直覺變鈍，或想太多睡不好","看不清自己的方向"],
+   todo:["每天靜坐冥想 5–10 分鐘","睡前一小時放下手機","記錄夢境與突然冒出的靈感"],
+   pend:"校準眉心輪，提升洞察頻率，讓思緒安靜下來、直覺變得清楚。",
+   reiki:"讓過度運轉的大腦休息，回到清明與內在的知曉。"},
+  {k:"crown",name:"頂輪",short:"頂輪",c:"#B657C6",pos:"頭頂",theme:"靈性連結・信任・意義",
+   signs:["覺得人生沒有意義、很空","孤單，好像跟宇宙斷了線","什麼都想掌控，無法放手交託"],
+   todo:["每天留幾分鐘安靜或祈禱","到戶外看看天空與星星","把放不下的事寫下來，再練習交託"],
+   pend:"連結更高的頻率，讓你重新感覺被指引、被支持。",
+   reiki:"靈氣從頭頂流入，帶來深層的平靜與信任，與高我重新連線。"}
+];
+const MONEY = {k:"money",name:"金錢能量",short:"金錢",c:"#D9B46A"};
+
+const HAWKINS = [
+  [20,"羞愧"],[30,"內疚"],[50,"冷淡"],[75,"悲傷"],[100,"恐懼"],[125,"慾望"],[150,"憤怒"],[175,"驕傲"],
+  [200,"勇氣"],[250,"淡定"],[310,"主動"],[350,"寬容"],[400,"明智"],[500,"愛"],[540,"喜悅"],[600,"平和"],[700,"開悟"],[1000,""]
+];
+
+const MONEY_LEVELS = [
+  {min:0,label:"匱乏模式",desc:"對錢帶著恐懼或罪惡感，錢一靠近就想推開。",
+   todo:["寫下你對錢最深的三個信念，看看哪一句是別人給你的","每天記錄一筆「收到的豐盛」，包含別人請你喝的一杯咖啡"]},
+  {min:150,label:"焦慮守財",desc:"錢會來，但留不住或不敢花，心裡常有「不夠」的聲音。",
+   todo:["有意識地花一筆讓自己開心的小錢，並在心裡說謝謝","把收入的固定比例先存起來，給海底輪安全感"]},
+  {min:250,label:"穩定流動",desc:"金錢進出平衡，準備好迎接下一個層級。",
+   todo:["設定一個具體收入目標，拆成每週行動","把一部分收入投資在自己的成長上"]},
+  {min:400,label:"豐盛擴展",desc:"你和金錢的關係友善，豐盛正在放大。",
+   todo:["開始分享你的價值，讓更多人找到你","練習大方接受讚美與報酬"]},
+  {min:550,label:"金錢磁吸",desc:"你的頻率本身就在吸引資源與機會。",
+   todo:["保持感恩，固定回饋與分享","用你的豐盛去幫助更多人，能量會持續循環"]}
+];
+
+/* ====== 工具 ====== */
+const $ = s => document.querySelector(s);
+function cyrb53(str,seed=0){let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0;i<str.length;i++){const ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function hawkinsName(s){if(s>=700)return"開悟";let n=HAWKINS[0][1];for(const [v,l] of HAWKINS){if(v<=s&&l)n=l;}return n;}
+function level(s){if(s<100)return{cls:"severe",label:"嚴重失衡"};if(s<200)return{cls:"low",label:"失衡"};if(s<350)return{cls:"mid",label:"啟動中"};if(s<500)return{cls:"ok",label:"平衡"};return{cls:"high",label:"高頻共振"};}
+function moneyLevel(s){let r=MONEY_LEVELS[0];for(const m of MONEY_LEVELS)if(s>=m.min)r=m;return r;}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function compute(name,birth){
+  const date = todayStr();
+  const rnd = mulberry32(cyrb53(name.trim()+"|"+birth+"|"+date));
+  const scores = CHAKRAS.map(()=>{
+    const z=(rnd()+rnd())/2;
+    let s=Math.round(40+z*600);
+    if(rnd()<0.05)s=Math.min(980,s+220);
+    return s;
+  });
+  const [root,sacral,solar,heart,throat] = scores;
+  let money = Math.round(root*.4+solar*.3+heart*.15+throat*.15+(rnd()-.5)*120);
+  money = Math.max(20,Math.min(990,money));
+  const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  return {name:name.trim(),birth,date,scores,money,avg};
+}
+
+/* ====== 靈擺 SVG ====== */
+function pendulumSVG(big){
+  return `<svg class="pend-svg ${big?"big":""}" viewBox="0 0 200 260" aria-hidden="true">
+  <defs>
+    <linearGradient id="gch${big?1:0}" x1="0" x2="1"><stop offset="0" stop-color="#8a6a2c"/><stop offset=".5" stop-color="#F4DFA6"/><stop offset="1" stop-color="#8a6a2c"/></linearGradient>
+    <linearGradient id="gcr${big?1:0}" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#F4DFA6"/><stop offset=".45" stop-color="#D9B46A"/><stop offset="1" stop-color="#6b4f1d"/></linearGradient>
+    <radialGradient id="glow${big?1:0}"><stop offset="0" stop-color="#F4DFA6" stop-opacity=".55"/><stop offset="1" stop-color="#F4DFA6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <circle cx="100" cy="8" r="5" fill="#D9B46A"/>
+  <ellipse class="aura" cx="100" cy="246" rx="70" ry="9" fill="none" stroke="#D9B46A" stroke-opacity=".25"/>
+  <g class="swing">
+    <line x1="100" y1="8" x2="100" y2="168" stroke="url(#gch${big?1:0})" stroke-width="1.6" stroke-dasharray="3 2"/>
+    <circle class="bobglow" cx="100" cy="196" r="38" fill="url(#glow${big?1:0})"/>
+    <g class="bob">
+      <circle cx="100" cy="170" r="4" fill="none" stroke="#D9B46A" stroke-width="1.6"/>
+      <polygon points="100,174 116,190 100,236 84,190" fill="url(#gcr${big?1:0})"/>
+      <polygon points="100,174 116,190 100,196 84,190" fill="#F4DFA6" opacity=".7"/>
+      <line x1="100" y1="196" x2="100" y2="236" stroke="#6b4f1d" stroke-opacity=".5"/>
+    </g>
+  </g>
+</svg>`;
+}
+$("#pendIntro").innerHTML = pendulumSVG(false);
+$("#pendScan").innerHTML = pendulumSVG(true);
+$("#brandName").textContent = CONFIG.brand;
+$("#birth").max = todayStr();
+
+/* ====== 星空 ====== */
+(function stars(){
+  const cv=$("#stars"),ctx=cv.getContext("2d");let W,H,pts=[];
+  function size(){const dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    pts=Array.from({length:Math.round(W*H/5200)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:Math.random()*.02+.004,g:Math.random()<.12}));}
+  function draw(){ctx.clearRect(0,0,W,H);for(const s of pts){s.p+=s.s;const a=.35+.65*Math.abs(Math.sin(s.p));ctx.fillStyle=s.g?`rgba(244,223,166,${a})`:`rgba(237,232,219,${a*.8})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.28);ctx.fill();}
+    if(!reduceMotion)requestAnimationFrame(draw);}
+  size();addEventListener("resize",()=>{size();if(reduceMotion)draw();});draw();
+})();
+
+/* ====== 流程 ====== */
+try{const saved=JSON.parse(localStorage.getItem("pendulum-last")||"null");if(saved){$("#name").value=saved.name||"";$("#birth").value=saved.birth||"";}}catch(e){}
+
+$("#form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("#name").value.trim(),birth=$("#birth").value;
+  if(!name){$("#err").textContent="請輸入姓名，靈擺需要知道要感應誰";$("#name").focus();return;}
+  if(!birth||birth>todayStr()||birth<"1920-01-01"){$("#err").textContent="請選擇正確的出生年月日";$("#birth").focus();return;}
+  $("#err").textContent="";
+  try{localStorage.setItem("pendulum-last",JSON.stringify({name,birth}));}catch(e){}
+  runScan(compute(name,birth));
+});
+
+function show(id){for(const s of ["intro","scan","result"])$("#"+s).hidden=(s!==id);scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});}
+
+function runScan(data){
+  show("scan");
+  const row=$("#scanRow");
+  row.innerHTML=[...CHAKRAS,MONEY].map(c=>`<i style="--c:${c.c}" class="${c.k==="money"?"money":""}" title="${c.name}"></i>`).join("");
+  const dots=[...row.children];
+  const swing=$("#pendScan .swing"),bob=$("#pendScan .bob"),glow=$("#pendScan .bobglow"),aura=$("#pendScan .aura");
+  const steps=[...CHAKRAS.map(c=>"感應 "+c.name+"…"),"感應 金錢能量…"];
+  const stepMs=reduceMotion?180:820, lead=reduceMotion?200:900, total=lead+steps.length*stepMs+500;
+  const t0=performance.now();let lastStep=-1;
+  function frame(now){
+    const t=now-t0;
+    if(!reduceMotion){
+      const amp=Math.min(1,t/1400)*(t<lead+steps.length*stepMs?1:Math.max(0,1-(t-lead-steps.length*stepMs)/500));
+      const w=t*0.0062;
+      const ang=26*amp*Math.sin(w);
+      const depth=Math.cos(w*(t>lead?1:0));
+      swing.setAttribute("transform",`rotate(${ang.toFixed(2)} 100 8)`);
+      const sc=1+0.08*depth*(t>lead?1:0);
+      bob.setAttribute("transform",`translate(100 205) scale(${sc.toFixed(3)}) translate(-100 -205)`);
+      glow.setAttribute("opacity",(.55+.45*Math.abs(Math.sin(t*0.004))).toFixed(2));
+      aura.setAttribute("rx",(40+30*amp).toFixed(1));
+    }
+    const step=Math.floor((t-lead)/stepMs);
+    if(t<lead){$("#scanStatus").textContent="靈擺校準中…";}
+    else if(step<steps.length&&step!==lastStep){lastStep=step;$("#scanStatus").textContent=steps[step];dots[step].classList.add("on");}
+    else if(step>=steps.length){$("#scanStatus").textContent="感應完成";}
+    if(t<total)requestAnimationFrame(frame);else renderResult(data);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ====== 結果 ====== */
+function renderResult(d){
+  show("result");
+  const all=[...CHAKRAS.map((c,i)=>({...c,s:d.scores[i]})),{...MONEY,s:d.money}];
+  const ch=all.slice(0,7);
+  const strongest=ch.reduce((a,b)=>b.s>a.s?b:a), weakest=ch.reduce((a,b)=>b.s<a.s?b:a);
+
+  /* 分享卡 */
+  $("#shareCard").innerHTML=`
+    <div class="share-head">
+      <div><div class="big-cap">靈擺能量卡</div><div class="share-name">${esc(d.name)}</div></div>
+      <div class="share-date">${d.date.replace(/-/g,".")}<br>今日能量</div>
+    </div>
+    <div class="share-score">
+      <div><div class="big-cap">綜合能量層級</div><div class="big-num" data-count="${d.avg}">0</div><div class="big-lvl">${hawkinsName(d.avg)}・${level(d.avg).label}</div></div>
+      <div><div class="big-cap">金錢能量</div><div class="big-num" data-count="${d.money}">0</div><div class="big-lvl">${moneyLevel(d.money).label}</div></div>
+    </div>
+    <div class="mini">${all.map(c=>`<div class="mini-row"><b>${c.short}</b><div class="mini-bar"><span style="--c:${c.c};width:${Math.max(3,c.s/10)}%"></span></div><em style="color:${c.s<200?"var(--low)":"var(--text)"}">${c.s}</em></div>`).join("")}</div>
+    <div class="share-foot"><span>最強：${strongest.name}　需照顧：${weakest.name}</span><span>${esc(CONFIG.brand)}｜${CONFIG.lineId?"LINE "+esc(CONFIG.lineId):"LINE 官方帳號"}</span></div>`;
+
+  /* 數字跳動 */
+  document.querySelectorAll("[data-count]").forEach(el=>{
+    const target=+el.dataset.count;if(reduceMotion){el.textContent=target;return;}
+    const t0=performance.now();(function tick(now){const p=Math.min(1,(now-t0)/1200);el.textContent=Math.round(target*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick);})(t0);
+  });
+
+  /* 樹狀圖 */
+  $("#chart").innerHTML=treeChart(all);
+
+  /* 對照表 */
+  $("#table").innerHTML=all.map(c=>{const L=level(c.s);return `<div class="tr"><span class="dot" style="--c:${c.c}"></span>
+    <div class="nm"><b>${c.name}</b><small>${c.k==="money"?moneyLevel(c.s).label+"・金錢關係":c.theme}</small></div>
+    <span class="chip ${L.cls}">${L.label}</span><span class="sc">${c.s}</span></div>`;}).join("");
+
+  /* 失衡建議 */
+  let care=ch.filter(c=>c.s<200).sort((a,b)=>a.s-b.s);
+  if(care.length){
+    $("#careTitle").textContent=`需要照顧的脈輪（${care.length}）`;
+    $("#careLead").textContent="以下脈輪今天低於 200 勇氣線，能量偏向收縮。先從日常練習開始，再搭配調頻與靈氣，效果最快。";
+  }else{
+    care=[weakest];
+    $("#careTitle").textContent="最值得提升的脈輪";
+    $("#careLead").textContent="恭喜，今天七個脈輪都在 200 以上。把最低的那一個拉高，整體頻率會跟著往上走。";
+  }
+  $("#care").innerHTML=care.map(c=>`<div class="care" style="--c:${c.c}">
+    <div class="care-head"><h3>${c.name}｜${c.s}・${hawkinsName(c.s)}</h3><span class="care-meta">${c.pos}・${c.theme}</span></div>
+    <div class="blk"><h4>你可能會感覺</h4><ul>${c.signs.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+    <div class="blk"><h4>今天就可以做</h4><ul>${c.todo.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+    <div class="tool">
+      <div><h4>靈擺調頻・提升頻率</h4><p>${c.pend}</p></div>
+      <div><h4>臼井靈氣・平衡狀態</h4><p>${c.reiki}</p></div>
+    </div></div>`).join("");
+
+  /* 金錢 */
+  const M=moneyLevel(d.money);
+  $("#money").innerHTML=`<h2>金錢能量</h2>
+    <div class="money-top"><div class="coin">${d.money}</div>
+      <div style="min-width:0;flex:1"><h3 style="color:var(--gold-hi)">${M.label}</h3><p class="care-meta">${M.desc}</p>
+        <div class="meter"><span style="width:${d.money/10}%"></span></div>
+        <div class="meter-ticks"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span></div></div></div>
+    <div class="blk"><h4>給你的金錢練習</h4><ul>${M.todo.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+    <div class="tool">
+      <div><h4>靈擺調頻・提升頻率</h4><p>針對海底輪與太陽輪調頻，清除「錢很難賺、我不配」的低頻信念，讓收入的天花板往上移。</p></div>
+      <div><h4>臼井靈氣・平衡狀態</h4><p>穩定面對金錢時的焦慮與緊縮，讓錢進得來、也留得住。</p></div>
+    </div>`;
+
+  /* CTA */
+  $("#lineBtn").href=CONFIG.lineUrl;
+  $("#lineId").textContent=CONFIG.lineId;$("#lineId").parentElement.hidden=!CONFIG.lineId;
+  window._result=d;window._all=all;
+}
+
+function treeChart(all){
+  const rowH=24, top=18, n=HAWKINS.length, bottom=46;
+  const H=top+(n-1)*rowH+bottom, W=360, xL=96, xR=352, colW=(xR-xL)/all.length;
+  const yIdx=i=>top+(n-1-i)*rowH;
+  const yOf=s=>{s=Math.max(20,Math.min(1000,s));for(let i=0;i<n-1;i++){const [a]=HAWKINS[i],[b]=HAWKINS[i+1];if(s<=b){return yIdx(i)-(s-a)/(b-a)*rowH;}}return yIdx(n-1);};
+  const y200=yOf(200), y500=yOf(500), yBase=yIdx(0)+10;
+  let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="霍金斯能量層級樹狀圖">`;
+  g+=`<rect x="${xL}" y="${y200}" width="${xR-xL}" height="${yBase-y200}" fill="rgba(232,115,95,.08)"/>`;
+  g+=`<rect x="${xL}" y="${yIdx(n-1)}" width="${xR-xL}" height="${y500-yIdx(n-1)}" fill="rgba(217,180,106,.07)"/>`;
+  HAWKINS.forEach(([v,l],i)=>{const y=yIdx(i);const key=v===200;
+    g+=`<line x1="${xL}" x2="${xR}" y1="${y}" y2="${y}" stroke="${key?"#D9B46A":"rgba(237,232,219,.08)"}" stroke-width="${key?1.2:1}" ${key?'stroke-dasharray="4 3"':""}/>`;
+    g+=`<text x="${xL-8}" y="${y+4}" text-anchor="end" font-size="11" fill="${v<200?"#E8735F":v>=500?"#F4DFA6":"#A9A6BC"}" font-family="Noto Sans TC,sans-serif">${l?l+" ":""}<tspan font-family="Cormorant Garamond,serif" font-size="12">${v}</tspan></text>`;});
+  g+=`<text x="${xR-4}" y="${y200-5}" text-anchor="end" font-size="10" fill="#D9B46A" font-family="Noto Sans TC,sans-serif">正負能量分界</text>`;
+  /* 主幹 */
+  g+=`<line x1="${xL}" x2="${xL}" y1="${yIdx(n-1)}" y2="${yBase}" stroke="#D9B46A" stroke-opacity=".6" stroke-width="2"/>`;
+  all.forEach((c,i)=>{const cx=xL+colW*(i+.5),cy=yOf(c.s);
+    g+=`<line x1="${cx}" x2="${cx}" y1="${yBase}" y2="${cy}" stroke="${c.c}" stroke-opacity=".55" stroke-width="2.5" stroke-linecap="round"/>`;
+    g+=`<circle cx="${cx}" cy="${cy}" r="11" fill="${c.c}" fill-opacity=".22"/>`;
+    g+=`<circle cx="${cx}" cy="${cy}" r="6" fill="${c.c}" stroke="#0A0E22" stroke-width="1.5"/>`;
+    const ty=cy-14<12?cy+22:cy-14;
+    g+=`<text x="${cx}" y="${ty}" text-anchor="middle" font-size="12" font-weight="600" fill="${c.s<200?"#E8735F":"#EDE8DB"}" font-family="Cormorant Garamond,serif">${c.s}</text>`;
+    g+=`<text x="${cx}" y="${yBase+18}" text-anchor="middle" font-size="11" fill="${c.c}" font-family="Noto Sans TC,sans-serif">${c.short}</text>`;
+  });
+  g+=`<line x1="${xL}" x2="${xR}" y1="${yBase}" y2="${yBase}" stroke="#D9B46A" stroke-opacity=".5"/>`;
+  return g+"</svg>";
+}
+
+/* ====== 按鈕 ====== */
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,1800);}
+async function copy(text,ok){try{await navigator.clipboard.writeText(text);toast(ok);}catch(e){toast("請長按文字手動複製");}}
+$("#copyLine").addEventListener("click",()=>copy(CONFIG.lineId,"已複製 LINE ID"));
+$("#copyText").addEventListener("click",()=>{const d=window._result,all=window._all;if(!d)return;
+  const txt=`【靈擺能量卡】${d.name}｜${d.date}\n綜合能量 ${d.avg}（${hawkinsName(d.avg)}）\n金錢能量 ${d.money}（${moneyLevel(d.money).label}）\n`+all.slice(0,7).map(c=>`${c.name} ${c.s}・${level(c.s).label}`).join("\n")+`\n\n想調頻提升 → 加 LINE ${CONFIG.lineUrl}`;
+  copy(txt,"已複製結果文字");});
+$("#again").addEventListener("click",()=>{$("#name").value="";$("#birth").value="";show("intro");$("#name").focus();});
+</script>
+
+</body>
+</html>
