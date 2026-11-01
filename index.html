@@ -224,7 +224,7 @@ input::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.6)}
 @keyframes shuf{0%,100%{transform:none}50%{transform:translateX(14px) rotate(6deg)}}
 .pick-status{text-align:center;font-family:var(--f-display);color:var(--gold-hi);font-size:18px}
 .spread{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.tslot{display:flex;flex-direction:column;align-items:center;gap:6px;width:min(150px,30vw)}
+.tslot{display:flex;flex-direction:column;align-items:center;gap:6px;width:min(150px,calc((100% - 24px) / 3))}
 .tslot.solo{width:min(190px,52vw)}
 .tslot .pos{font-size:12px;letter-spacing:.14em;color:var(--gold)}
 .flip{width:100%;aspect-ratio:200/340;perspective:900px}
