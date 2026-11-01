@@ -437,9 +437,9 @@ function readingFor(card,pos,idx){
   const meaning=card.reversed?card.rev:card.up;
   let extra="";
   if(T.spread==="theme"){
-    const themeLine=card.major?"這是一張大阿爾克那，代表這件事背後有更深的人生課題。":SUITS[card.suit][T.theme];
-    extra=themeLine;
-    if(idx===2)extra+=card.major?" "+card.advice:(card.reversed?" 先處理讓你卡住的地方，再往前走。":" 順著這張牌的能量去做，就是你的下一步。");
+    if(card.major){extra=`放在${THEMES[T.theme]}上，這是一張大阿爾克那，代表背後有更深的課題。${card.advice}`;}
+    else{extra=SUITS[card.suit][T.theme];
+      if(idx===2)extra+=card.reversed?" 先處理讓你卡住的地方，再往前走。":" 順著這張牌的能量去做，就是你的下一步。";}
   }else if(card.major){extra=card.advice;}
   else if(T.spread==="daily"){extra=`今天的關鍵字是「${SUITS[card.suit].tone}」，${card.reversed?"留意能量卡住的地方，放慢一點。":"順著這股能量行動，會很順利。"}`;}
   else{extra=`${SUITS[card.suit].name}屬${SUITS[card.suit].el}元素，與${SUITS[card.suit].tone}有關。`;}
@@ -475,7 +475,8 @@ function renderTarot(){
     else if(revs===0)sum.push("三張都是正位，能量流動順暢，現在是行動的好時機。");
     if(dom&&dom[1]>=2)sum.push(`牌面以${SUITS[dom[0]].name}為主，這件事的關鍵在「${SUITS[dom[0]].tone}」。`);
     const last=T.picked[T.picked.length-1];
-    sum.push(`最後一張「${last.name}」${last.reversed?"逆位，提醒你方向需要調整，別硬撐。":"正位，結果是值得期待的。"}`);
+    if(T.spread==="ppf")sum.push(`未來的「${last.name}」${last.reversed?"是逆位，提醒你方向需要調整，別硬撐。":"是正位，照目前的方向走，事情會往這張牌的能量發展。"}`);
+    else sum.push(`宇宙給你的建議是「${last.name}」：${last.major?last.advice:(last.reversed?last.rev+"，先把這個卡點處理好。":last.up+"，就照這樣去做。")}`);
   }
   $("#tSummary").innerHTML=`<h2>整體訊息</h2><p>${sum.join("")}</p>
     <p class="care-meta">塔羅反映的是此刻的能量，你的選擇隨時能改變結果。</p>`;
