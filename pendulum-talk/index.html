@@ -29,6 +29,7 @@
   --gold:#dcaa62;--gold-soft:#3b2d1f;--rose:#e07a87;--cta:#dcaa62;--cta-ink:#1a1316;color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.85;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:720px;margin:0 auto}
@@ -292,9 +293,9 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
       <dt>活動</dt><dd>靈擺 × 能量調頻講座</dd>
       <dt>場次</dt><dd>11／13（五）19:00–21:00<br>11／18（三）19:00–21:00</dd>
       <dt>費用</dt><dd>線上參加：免費<br>台北實體：NT$800，<strong>加贈七脈輪能量檢測</strong><span class="note">（現場由老師以靈擺為你檢測七個脈輪的能量狀態）</span></dd>
-      <dt>線上</dt><dd>不限名額。開課前透過 Email 寄送會議室連結。</dd>
+      <dt>線上</dt><dd>不限名額。報名完成後到官方 LINE 輸入「111」，取得線上直播連結。</dd>
       <dt>實體</dt><dd>每場限額 15 位<br>台北市中正區南陽街 3 號 5 樓之 2<span class="note">（近捷運台北車站）</span></dd>
-      <dt>付款</dt><dd>實體場以匯款完成順序保留名額<br>中國信託（822）<span class="acct">164540081739</span></dd>
+      <dt>付款</dt><dd>實體場可匯款或信用卡刷卡，以付款完成順序保留名額</dd>
       <dt>攜帶</dt><dd>不需自備靈擺</dd>
     </dl>
   </section>
@@ -302,7 +303,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
   <section id="register">
     <p class="eyebrow">Register</p>
     <h2>報名</h2>
-    <p class="lede">填好資料後，把報名訊息傳到 LINE 官方帳號。線上場收到確認即完成報名；實體場完成匯款並回傳帳號後五碼，收到確認才算保留名額。</p>
+    <p class="lede">線上場填好資料即可送出。台北實體場請先完成付款，再填寫匯款後五碼或刷卡卡號末四碼，方便我們核對。</p>
     <form class="reg" id="regForm" novalidate>
       <div class="field">
         <span class="legend" id="lgSession">場次</span>
@@ -314,36 +315,45 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
       <div class="field">
         <span class="legend" id="lgMode">參加方式</span>
         <div class="choose" role="radiogroup" aria-labelledby="lgMode">
-          <div class="opt"><input type="radio" name="mode" id="mOnline" value="線上" checked><label for="mOnline"><b>線上參加・免費</b><small>不限名額・Email 寄會議室連結</small></label></div>
+          <div class="opt"><input type="radio" name="mode" id="mOnline" value="線上" checked><label for="mOnline"><b>線上參加・免費</b><small>不限名額・LINE 輸入 111 取得連結</small></label></div>
           <div class="opt"><input type="radio" name="mode" id="mOffline" value="台北實體"><label for="mOffline"><b>台北實體・NT$800</b><small>加贈七脈輪能量檢測・限 15 位</small></label></div>
         </div>
       </div>
-      <div class="field"><label for="fName">姓名</label><input type="text" id="fName" autocomplete="name" required></div>
-      <div class="field"><label for="fEmail">Email</label><input type="email" id="fEmail" autocomplete="email" inputmode="email" required><span class="note">線上會議室連結會寄到這裡</span></div>
-      <div class="field"><label for="fPhone">電話</label><input type="tel" id="fPhone" autocomplete="tel" inputmode="tel" required></div>
-      <div class="field" id="last5Field" hidden><label for="fLast5">匯款帳號後五碼（已匯款可先填，未匯款可之後在 LINE 補上）</label><input type="text" id="fLast5" inputmode="numeric" maxlength="5" autocomplete="off"></div>
-      <div class="field"><label for="fNote">想在講座中了解的問題（選填）</label><textarea id="fNote"></textarea></div>
-      <label class="agree"><input type="checkbox" id="fAgree"><span>我已年滿 20 歲，目前身心狀況適合參與團體活動，無傳染性疾病，並了解本活動為身心靈探索與自我覺察性質，非醫療、心理治療或診斷行為。</span></label>
-      <p class="err" id="fErr" hidden></p>
-      <button class="btn" type="submit">產生報名訊息</button>
-    </form>
-    <div class="done" id="done" hidden>
-      <h3>最後一步：傳到 LINE 完成報名</h3>
       <div class="paybox" id="payBox" hidden>
-        <h3>實體場請先匯款 NT$800</h3>
-        <dl class="bank">
+        <h3>先完成付款 NT$800</h3>
+        <div class="choose" role="radiogroup" aria-label="付款方式">
+          <div class="opt"><input type="radio" name="pay" id="pBank" value="匯款" checked><label for="pBank"><b>銀行匯款</b><small>中國信託（822）</small></label></div>
+          <div class="opt"><input type="radio" name="pay" id="pCard" value="信用卡"><label for="pCard"><b>信用卡刷卡</b><small>PayUni 安全付款</small></label></div>
+        </div>
+        <dl class="bank" id="bankInfo">
           <dt>銀行</dt><dd>中國信託（822）</dd>
           <dt>帳號</dt><dd><span id="acct" class="acct">164540081739</span> <button class="copy" id="copyAcct" type="button">複製帳號</button></dd>
           <dt>金額</dt><dd>NT$800</dd>
         </dl>
-        <p class="note">匯款後，在 LINE 回傳下方報名訊息與帳號後五碼。名額以匯款完成順序為準，額滿後才匯款者可選擇全額退款或改為線上參加。</p>
+        <div id="cardInfo" hidden style="display:grid;gap:8px">
+          <a class="btn" href="https://api.payuni.com.tw/api/uop/receive_info/2/1/WPBR1762940386/QxFSp8x3rQu8JQ6fGiiUX" target="_blank" rel="noopener">前往 PayUni 刷卡付款</a>
+          <p class="note">付款由 PayUni 處理，本頁不會看到或儲存你的卡號。付款成功後回到這裡填寫卡號末四碼。</p>
+        </div>
+        <div class="field"><label for="fCode" id="codeLabel">匯款帳號後五碼</label><input type="text" id="fCode" inputmode="numeric" maxlength="5" autocomplete="off"></div>
       </div>
-      <pre id="msg"></pre>
-      <div class="btnrow">
+      <div class="field"><label for="fName">姓名</label><input type="text" id="fName" autocomplete="name" required></div>
+      <div class="field"><label for="fEmail">Email</label><input type="email" id="fEmail" autocomplete="email" inputmode="email" required><span class="note">報名確認信會寄到這裡</span></div>
+      <div class="field"><label for="fPhone">電話</label><input type="tel" id="fPhone" autocomplete="tel" inputmode="tel" required></div>
+      <div class="field"><label for="fNote">想在講座中了解的問題（選填）</label><textarea id="fNote"></textarea></div>
+      <label class="agree"><input type="checkbox" id="fAgree"><span>我已年滿 20 歲，目前身心狀況適合參與團體活動，無傳染性疾病，並了解本活動為身心靈探索與自我覺察性質，非醫療、心理治療或診斷行為。</span></label>
+      <p class="err" id="fErr" hidden></p>
+      <button class="btn" type="submit" id="submitBtn">送出報名</button>
+    </form>
+    <div class="done" id="done" hidden>
+      <h3 id="doneTitle">報名已送出</h3>
+      <p id="doneText"></p>
+      <div id="fallback" hidden style="display:grid;gap:12px">
+        <p class="note">請複製下方報名訊息，傳到官方 LINE 完成報名。</p>
+        <pre id="msg"></pre>
         <button class="btn" type="button" id="copyMsg">複製報名訊息</button>
-        <a class="btn ghost" href="https://lin.ee/P7Ft3BoM" target="_blank" rel="noopener">開啟 LINE 官方帳號</a>
       </div>
-      <p class="note">複製後到 LINE 貼上送出。若按鈕無法開啟，請在 LINE 搜尋或複製網址 https://lin.ee/P7Ft3BoM。線上會議室連結會在開課前一天寄到你的 Email。</p>
+      <div class="btnrow"><a class="btn ghost" href="https://line.me/R/home/public/profile?id=017iupde" target="_blank" rel="noopener">開啟官方 LINE</a></div>
+      <p class="note">若按鈕無法開啟，請在 LINE 搜尋官方帳號 ID：017iupde</p>
       <button class="copy" type="button" id="editAgain">修改資料</button>
     </div>
   </section>
@@ -353,7 +363,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
     <h2>報名前，想先了解</h2>
     <div>
       <details><summary>完全沒接觸過靈擺可以參加嗎？</summary><p>可以。講座以生活化的方式說明能量、頻率與靈擺，特別適合第一次接觸的人，也不需要自備靈擺。</p></details>
-      <details><summary>線上場怎麼參加？</summary><p>開課前一天會寄出會議室連結到你填寫的 Email。當天 18:00 前還沒收到，請先檢查垃圾郵件，再透過 LINE 告訴我們。</p></details>
+      <details><summary>線上場怎麼參加？</summary><p>報名完成後，加入官方 LINE 並輸入「111」，就會收到線上直播連結。</p></details>
       <details><summary>七脈輪能量檢測是什麼？</summary><p>實體場學員專屬。老師會在現場用靈擺為你檢測海底輪到頂輪七個脈輪的能量狀態，讓你知道目前哪裡最需要照顧。</p></details>
       <details><summary>實體場要提早到嗎？</summary><p>建議 18:50 前抵達報到，19:00 準時開始。地址：台北市中正區南陽街 3 號 5 樓之 2，近捷運台北車站。</p></details>
       <details><summary>退費與換場規則</summary>
@@ -372,7 +382,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
 
   <footer>
     <span>拾光星旅程｜塔羅・調頻・靈氣</span>
-    <span>有任何問題，歡迎透過 LINE 官方帳號詢問：https://lin.ee/P7Ft3BoM</span>
+    <span>有任何問題，歡迎透過<a href="https://line.me/R/home/public/profile?id=017iupde" target="_blank" rel="noopener">官方 LINE</a> 詢問</span>
   </footer>
 </div>
 
@@ -380,32 +390,65 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
 
 <script>
 (function(){
-  var f=document.getElementById('regForm'),done=document.getElementById('done'),err=document.getElementById('fErr'),msg=document.getElementById('msg');
-  function val(id){return document.getElementById(id).value.trim();}
+  // Google 試算表 Apps Script 網址；留空時改用「複製訊息傳到 LINE」
+  var SHEET_URL='';
+  var $=function(id){return document.getElementById(id);};
+  var f=$('regForm'),done=$('done'),err=$('fErr'),msg=$('msg');
+  function val(id){return $(id).value.trim();}
+  function isOff(){return $('mOffline').checked;}
+  function isCard(){return $('pCard').checked;}
+  function sync(){
+    $('payBox').hidden=!isOff();
+    $('bankInfo').hidden=isCard(); $('cardInfo').hidden=!isCard();
+    $('codeLabel').textContent=isCard()?'刷卡卡號末四碼':'匯款帳號後五碼';
+    $('fCode').maxLength=isCard()?4:5;
+  }
+  f.querySelectorAll('input[name=mode],input[name=pay]').forEach(function(r){r.addEventListener('change',sync);});
+  sync();
+  function selectText(el){var s=window.getSelection(),r=document.createRange();r.selectNodeContents(el);s.removeAllRanges();s.addRange(r);}
+  function copy(btn,el,ok){
+    var t=el.textContent.trim();
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){btn.textContent=ok;}).catch(function(){selectText(el);btn.textContent='已選取，請長按複製';});}
+    else{selectText(el);btn.textContent='已選取，請長按複製';}
+  }
+  $('copyAcct').addEventListener('click',function(e){copy(e.currentTarget,$('acct'),'已複製');});
+  $('copyMsg').addEventListener('click',function(e){copy(e.currentTarget,msg,'已複製，到 LINE 貼上');});
+  $('editAgain').addEventListener('click',function(){done.hidden=true;f.hidden=false;});
+
+  function finish(data,saved,full){
+    var off=data.mode==='台北實體';
+    $('doneTitle').textContent=full?'這一場實體名額已滿':(saved?'報名已送出':'最後一步：傳到 LINE 完成報名');
+    $('doneText').textContent=full
+      ? '此場次的 15 個實體名額已額滿。你可以改選另一場，或改為線上參加；若已付款，請到官方 LINE 告知，我們會協助退款或改場。'
+      : off
+        ? '我們會在核對款項後，以 Email 與 LINE 通知你報名成功。實體場請於 18:50 前到台北市中正區南陽街 3 號 5 樓之 2 報到。'
+        : '請加入官方 LINE，輸入「111」取得線上直播連結。';
+    $('fallback').hidden=saved||full;
+    msg.textContent='【報名】靈擺 × 能量調頻講座\n場次：'+data.session+'\n參加方式：'+(off?'台北實體（NT$800，含七脈輪能量檢測）':'線上（免費）')+'\n姓名：'+data.name+'\nEmail：'+data.email+'\n電話：'+data.phone+(off?'\n付款方式：'+data.pay+'\n'+(data.pay==='信用卡'?'卡號末四碼：':'匯款後五碼：')+data.code:'')+(data.note?'\n想了解的問題：'+data.note:'');
+    f.hidden=true;done.hidden=false;done.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
   f.addEventListener('submit',function(e){
     e.preventDefault();
-    var name=val('fName'),email=val('fEmail'),phone=val('fPhone'),note=val('fNote');
-    var problems=[];
-    if(!name)problems.push('請填寫姓名');
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))problems.push('請填寫正確的 Email');
-    if(phone.replace(/\D/g,'').length<8)problems.push('請填寫可聯絡的電話');
-    if(!document.getElementById('fAgree').checked)problems.push('請勾選確認報名資格');
+    var data={session:f.querySelector('input[name=session]:checked').value,mode:f.querySelector('input[name=mode]:checked').value,
+      name:val('fName'),email:val('fEmail'),phone:val('fPhone'),note:val('fNote'),pay:'',code:''};
+    var off=data.mode==='台北實體',problems=[];
+    if(off){data.pay=isCard()?'信用卡':'匯款';data.code=val('fCode');
+      var need=isCard()?4:5;
+      if(!new RegExp('^\\d{'+need+'}$').test(data.code))problems.push(isCard()?'請填寫刷卡卡號末四碼':'請填寫匯款帳號後五碼');}
+    if(!data.name)problems.push('請填寫姓名');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))problems.push('請填寫正確的 Email');
+    if(data.phone.replace(/\D/g,'').length<8)problems.push('請填寫可聯絡的電話');
+    if(!$('fAgree').checked)problems.push('請勾選確認報名資格');
     if(problems.length){err.textContent=problems.join('、')+'。';err.hidden=false;return;}
     err.hidden=true;
-    var session=f.querySelector('input[name=session]:checked').value,mode=f.querySelector('input[name=mode]:checked').value,off=mode==='台北實體',l5=val('fLast5');
-    msg.textContent='【報名】靈擺 × 能量調頻講座\n場次：'+session+'\n參加方式：'+(off?'台北實體（NT$800，含七脈輪能量檢測）':'線上（免費）')+'\n姓名：'+name+'\nEmail：'+email+'\n電話：'+phone+(off?'\n匯款帳號後五碼：'+(l5||'（匯款後補上）'):'')+(note?'\n想了解的問題：'+note:'');
-    document.getElementById('payBox').hidden=!off;
-    f.hidden=true;done.hidden=false;done.scrollIntoView({behavior:'smooth',block:'start'});
-  });
-  f.querySelectorAll('input[name=mode]').forEach(function(r){r.addEventListener('change',function(){document.getElementById('last5Field').hidden=!document.getElementById('mOffline').checked;});});
-  document.getElementById('copyAcct').addEventListener('click',function(e){var b=e.currentTarget,el=document.getElementById('acct');
-    function sel(){var s=window.getSelection(),r=document.createRange();r.selectNodeContents(el);s.removeAllRanges();s.addRange(r);b.textContent='已選取';}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(el.textContent.trim()).then(function(){b.textContent='已複製';}).catch(sel);}else sel();});
-  document.getElementById('editAgain').addEventListener('click',function(){done.hidden=true;f.hidden=false;});
-  document.getElementById('copyMsg').addEventListener('click',function(e){
-    var b=e.currentTarget,t=msg.textContent;
-    function sel(){var s=window.getSelection(),r=document.createRange();r.selectNodeContents(msg);s.removeAllRanges();s.addRange(r);b.textContent='已選取，請長按複製';}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){b.textContent='已複製，到 LINE 貼上';}).catch(sel);}else sel();
+    if(!SHEET_URL){finish(data,false,false);return;}
+    var btn=$('submitBtn');btn.disabled=true;btn.textContent='送出中…';
+    fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
+      .then(function(r){return r.json();})
+      .then(function(res){finish(data,!!res.ok,res.full===true);})
+      .catch(function(){finish(data,false,false);})
+      .then(function(){btn.disabled=false;btn.textContent='送出報名';});
   });
 })();
 </script>
