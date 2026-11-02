@@ -334,7 +334,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
           <li><b>3</b>輸入「111」</li>
           <li><b>4</b>收到會議連結</li>
         </ol>
-        <p class="note">會議連結只會透過官方 LINE 發送，沒有加入 LINE 就收不到連結。</p>
+        <p class="note">報名確認信也會附上會議連結；課前提醒與臨時異動只會在官方 LINE 通知，請務必加入。</p>
       </div>
       <div class="paybox" id="payBox" hidden>
         <h3>先完成付款 NT$800</h3>
@@ -442,7 +442,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 96px;color:var(--mute
       ? '此場次的 15 個實體名額已額滿。你可以改選另一場，或改為線上參加；若已付款，請到官方 LINE 告知，我們會協助退款或改場。'
       : off
         ? '我們會在核對款項後，以 Email 與 LINE 通知你報名成功。實體場請於 18:50 前到台北市中正區南陽街 3 號 5 樓之 2 報到。'
-        : '還差最後一步：請立刻加入官方 LINE，並輸入「111」，就會收到線上會議連結。沒有加入 LINE 就收不到連結喔！';
+        : '還差最後一步：請加入官方 LINE 並輸入「111」取得會議連結。確認信也會寄到你的 Email；課前提醒與臨時異動只會在 LINE 通知喔！';
     $('fallback').hidden=saved||full;
     msg.textContent='【報名】靈擺 × 能量調頻講座\n場次：'+data.session+'\n參加方式：'+(off?'台北實體（NT$800，含七脈輪能量檢測）':'線上（免費）')+'\n姓名：'+data.name+'\nEmail：'+data.email+'\n電話：'+data.phone+(off?'\n付款方式：'+data.pay+'\n'+(data.pay==='信用卡'?'卡號末四碼：':'匯款後五碼：')+data.code:'')+(data.note?'\n想了解的問題：'+data.note:'');
     f.hidden=true;done.hidden=false;done.scrollIntoView({behavior:'smooth',block:'start'});
