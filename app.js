@@ -491,8 +491,9 @@ $("#tAgain").addEventListener("click",()=>{showT("intro");$("#tQ").value="";});
    老師專區
    ========================================================= */
 $("#pinForm").addEventListener("submit",e=>{e.preventDefault();
-  if($("#pin").value===CONFIG.teacherPin){$("#pinForm").hidden=true;$("#codeForm").hidden=false;$("#cName").focus();}
-  else $("#pinErr").textContent="密碼不正確";});
+  const pinVal=$("#pin").value.replace(/[\uFF10-\uFF19]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/\s/g,"");
+  if(pinVal===CONFIG.teacherPin){$("#pinForm").hidden=true;$("#codeForm").hidden=false;$("#cName").focus();}
+  else $("#pinErr").textContent="密碼不正確，請確認輸入的是 6 位數字";});
 $("#codeForm").addEventListener("submit",e=>{e.preventDefault();
   const n=$("#cName").value.trim(),b=$("#cBirth").value;if(!n||!b)return;
   const code=genCode(n,b);$("#codeOut").textContent=code;$("#copyCode").hidden=false;
