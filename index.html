@@ -440,8 +440,8 @@ input::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.6)}
   <section id="v-teacher" class="view" hidden>
     <div class="panel stack">
       <h2>老師專區：產生解鎖碼</h2>
-      <form id="pinForm">
-        <div><label for="pin">老師密碼</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password"></div>
+      <form id="pinForm" novalidate>
+        <div><label for="pin">老師密碼</label><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></div>
         <button class="btn" type="submit">進入</button>
         <p class="err" id="pinErr" role="alert"></p>
       </form>
@@ -458,7 +458,7 @@ input::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.6)}
 </main>
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js?v=20261104"></script>
-<script src="app.js?v=20261104"></script>
+<script src="data.js?v=20261104b"></script>
+<script src="app.js?v=20261104b"></script>
 </body>
 </html>
