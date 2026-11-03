@@ -4,7 +4,7 @@ const CONFIG = {
   lineUrl: "https://lin.ee/P7Ft3BoM",      // LINE 官方帳號連結
   sheetUrl: "",                            // Google 試算表的 Apps Script 網址（貼上後名單會自動寫入）
   reportPrice: "NT$ 399",                  // 完整能量報告售價
-  teacherPin: "8888",                      // 老師專區密碼（網址加 #teacher 進入）
+  teacherPin: "123456",                    // 老師專區密碼（網址加 #teacher 進入）
   codeSalt: "shiguang-star-2026"           // 解鎖碼的加密字串，改了舊的解鎖碼會失效
 };
 
