@@ -119,7 +119,7 @@ function saveProfile(p){Object.assign(profile,p);store("sg-profile",profile);}
 if(profile.name){$("#pName").value=profile.name;$("#tName").value=profile.name;}
 if(profile.email){$("#pEmail").value=profile.email;$("#tEmail").value=profile.email;}
 if(profile.birth){$("#pBirth").value=profile.birth;}
-$("#pBirth").max=todayStr();$("#cBirth").max=todayStr();
+$("#pBirth").max=todayStr();
 
 /* =========================================================
    靈擺脈輪測驗
