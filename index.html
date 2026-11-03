@@ -436,29 +436,10 @@ input::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.6)}
     </div>
   </section>
 
-  <!-- ===== TEACHER ===== -->
-  <section id="v-teacher" class="view" hidden>
-    <div class="panel stack">
-      <h2>老師專區：產生解鎖碼</h2>
-      <form id="pinForm" novalidate>
-        <div><label for="pin">老師密碼</label><input id="pin" type="password" inputmode="numeric" autocomplete="new-password"></div>
-        <button class="btn" type="submit">進入</button>
-        <p class="err" id="pinErr" role="alert"></p>
-      </form>
-      <form id="codeForm" hidden>
-        <p class="care-meta">客人付款後，輸入他在測驗填的姓名和生日，把產生的解鎖碼傳給他。同一個人永久有效。</p>
-        <div><label for="cName">客人姓名</label><input id="cName" maxlength="20"></div>
-        <div><label for="cBirth">客人生日</label><input id="cBirth" type="date" min="1920-01-01"></div>
-        <button class="btn" type="submit">產生解鎖碼</button>
-        <div class="code-out" id="codeOut"></div>
-        <button class="ghost" type="button" id="copyCode" hidden>複製傳給客人的訊息</button>
-      </form>
-    </div>
-  </section>
 </main>
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js?v=20261104b"></script>
-<script src="app.js?v=20261104b"></script>
+<script src="data.js?v=20261104c"></script>
+<script src="app.js?v=20261104c"></script>
 </body>
 </html>

@@ -1,11 +1,9 @@
 /* ====== 可修改設定 ====== */
 const CONFIG = {
   brand: "拾光星旅程",
-  lineUrl: "https://lin.ee/P7Ft3BoM",      // LINE 官方帳號連結
+  lineUrl: "https://lin.ee/Pm70YkZ",      // LINE 官方帳號連結
   sheetUrl: "https://script.google.com/macros/s/AKfycbypoOW7P5oQBRTkG3JdrmWNLzXCxLCOOLpBH2a1HFS0uMNvziz3aneWcMnA5yCS9pVa/exec",                            // Google 試算表的 Apps Script 網址（貼上後名單會自動寫入）
-  reportPrice: "NT$ 399",                  // 完整能量報告售價
-  teacherPin: "123456",                    // 老師專區密碼（網址加 #teacher 進入）
-  codeSalt: "shiguang-star-2026"           // 解鎖碼的加密字串，改了舊的解鎖碼會失效
+  unlockCode: "STAR"                       // 完整報告解鎖碼：預約諮詢的客人，老師直接告訴他這組碼（英文大小寫都可以）
 };
 
 /* ====== 工具 ====== */
@@ -23,7 +21,6 @@ function logLead(data){
   if(!CONFIG.sheetUrl)return;
   try{fetch(CONFIG.sheetUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)}).catch(()=>{});}catch(e){}
 }
-function genCode(name,birth){return cyrb53(CONFIG.codeSalt+"|"+name.trim()+"|"+birth).toString(36).toUpperCase().padStart(6,"0").slice(-6);}
 
 document.querySelectorAll(".js-line").forEach(a=>a.href=CONFIG.lineUrl);
 $("#brandName").textContent=CONFIG.brand;
@@ -105,7 +102,7 @@ $("#pendIntro").innerHTML=pendulumSVG("i",false);
 $("#pendScan").innerHTML=pendulumSVG("s",true);
 
 /* ====== 路由 ====== */
-const VIEWS=["home","pendulum","tarot","teacher"];
+const VIEWS=["home","pendulum","tarot"];
 function route(){
   const h=(location.hash||"#home").slice(1);
   const v=VIEWS.includes(h)?h:"home";
@@ -223,13 +220,12 @@ function questionDeep(d,all){
   <div class="tool"><div><h4>靈擺調頻・提升頻率</h4><p>${weak.pend}</p></div><div><h4>臼井靈氣・平衡狀態</h4><p>${weak.reiki}</p></div></div>`;
 }
 
-function unlockKey(d){return d.name+"|"+d.birth;}
-function isUnlocked(d){const u=store("sg-unlock")||[];return u.includes(unlockKey(d));}
+function isUnlocked(){return store("sg-report")===true;}
 
 function renderReport(d,all){
   const el=$("#report");
-  if(!isUnlocked(d)){
-    const msg=`我要購買完整能量報告｜姓名：${d.name}｜生日：${d.birth}`;
+  if(!isUnlocked()){
+    const msg=`我想預約一對一諮詢，並領取完整能量報告｜姓名：${d.name}`;
     el.innerHTML=`<div class="eyebrow">完整能量報告</div>
       <h2>你的專屬完整能量報告</h2>
       <ul class="report-list">
@@ -238,27 +234,27 @@ function renderReport(d,all){
         <li><b>21 天能量調頻練習表</b>依你的弱項排好每天一件事</li>
         <li><b>金錢能量突破計畫</b>找出錢留不住、進不來的原因</li>
       </ul>
-      <div class="blur-preview"><div class="fake">海底輪：你的海底輪目前處在收縮狀態，身體像一直開著警報，對未來與金錢的不確定讓你很難真正放鬆……<br>臍輪：情緒可能被壓在心裡，或對很多事情提不起勁……<br>第 1 天：赤腳踩地 10 分鐘　第 2 天：寫下三件讓你有安全感的事……</div><div class="lock">🔒 輸入解鎖碼即可閱讀</div></div>
+      <div class="blur-preview"><div class="fake">海底輪：你的海底輪目前處在收縮狀態，身體像一直開著警報，對未來與金錢的不確定讓你很難真正放鬆……<br>臍輪：情緒可能被壓在心裡，或對很多事情提不起勁……<br>第 1 天：赤腳踩地 10 分鐘　第 2 天：寫下三件讓你有安全感的事……</div><div class="lock">🔒 預約諮詢即可領取</div></div>
       <div class="cta">
-        <div><span class="care-meta">一次購買・永久解鎖</span><div class="price">${esc(CONFIG.reportPrice)}</div></div>
-        <a class="btn" id="buyBtn" href="${CONFIG.lineUrl}" target="_blank" rel="noopener">加 LINE 購買解鎖碼</a>
-        <p class="care-meta">點按鈕會自動複製下面這段訊息，貼到 LINE 傳給老師，付款後就會收到你的專屬解鎖碼：</p>
+        <p>這份完整報告是<b>一對一諮詢</b>的專屬贈禮。預約諮詢時，老師會給你解鎖碼，並陪你一起看懂報告、調整能量。</p>
+        <a class="btn" id="buyBtn" href="${CONFIG.lineUrl}" target="_blank" rel="noopener">加 LINE 預約諮詢・領取完整版</a>
+        <p class="care-meta">點按鈕會自動複製這段訊息，到 LINE 貼上傳給老師就可以：</p>
         <div class="buy-msg">${esc(msg)}</div>
       </div>
       <form id="unlockForm" class="stack" novalidate>
-        <label for="unlockCode">已經有解鎖碼了？</label>
-        <div class="unlock-row"><input id="unlockCode" maxlength="6" autocomplete="off" placeholder="6 碼"><button class="btn" type="submit" style="padding:12px 18px">解鎖</button></div>
+        <label for="unlockCode">老師給你解鎖碼了嗎？</label>
+        <div class="unlock-row"><input id="unlockCode" maxlength="20" autocomplete="off" placeholder="輸入解鎖碼"><button class="btn" type="submit" style="padding:12px 18px">解鎖</button></div>
         <p class="err" id="unlockErr" role="alert"></p>
       </form>`;
-    $("#buyBtn").addEventListener("click",()=>{try{navigator.clipboard.writeText(msg).then(()=>toast("已複製訊息，貼到 LINE 傳給老師"),()=>{});}catch(e){}});
+    $("#buyBtn").addEventListener("click",()=>{try{navigator.clipboard.writeText(msg).then(()=>toast("已複製訊息，到 LINE 貼上傳給老師"),()=>{});}catch(e){}});
     $("#unlockForm").addEventListener("submit",ev=>{
       ev.preventDefault();
       const code=$("#unlockCode").value.trim().toUpperCase();
-      if(code===genCode(d.name,d.birth)){
-        const u=store("sg-unlock")||[];u.push(unlockKey(d));store("sg-unlock",u);
+      if(code===String(CONFIG.unlockCode).trim().toUpperCase()){
+        store("sg-report",true);
         logLead({type:"報告解鎖",name:d.name,email:d.email,birth:d.birth,question:d.question,summary:"已解鎖完整報告"});
         toast("解鎖成功");renderReport(d,all);
-      }else{$("#unlockErr").textContent="解鎖碼不正確。請確認姓名、生日和購買時提供的一樣。";}
+      }else{$("#unlockErr").textContent="解鎖碼不正確，請確認老師給你的碼。";}
     });
     return;
   }
@@ -486,17 +482,5 @@ function renderTarot(){
   tarotBusy=false;
 }
 $("#tAgain").addEventListener("click",()=>{showT("intro");$("#tQ").value="";});
-
-/* =========================================================
-   老師專區
-   ========================================================= */
-$("#pinForm").addEventListener("submit",e=>{e.preventDefault();
-  const pinVal=$("#pin").value.replace(/[\uFF10-\uFF19]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/\s/g,"");
-  if(pinVal===CONFIG.teacherPin){$("#pinForm").hidden=true;$("#codeForm").hidden=false;$("#cName").focus();}
-  else $("#pinErr").textContent="密碼不正確，請確認輸入的是 6 位數字";});
-$("#codeForm").addEventListener("submit",e=>{e.preventDefault();
-  const n=$("#cName").value.trim(),b=$("#cBirth").value;if(!n||!b)return;
-  const code=genCode(n,b);$("#codeOut").textContent=code;$("#copyCode").hidden=false;
-  $("#copyCode").onclick=()=>copy(`${n} 你好，這是你的完整能量報告解鎖碼：${code}\n回到測驗結果頁，在「已經有解鎖碼了？」輸入就能閱讀，永久有效。`,"已複製訊息");});
 
 route();
